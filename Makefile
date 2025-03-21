@@ -20,7 +20,7 @@ LIBFT_DIR	:= libft
 # ==========================
 # Source Files
 # ==========================
-SRC_FILES   := main.c input.c fractal_utils.c fractal_render.c 
+SRC_FILES   := main.c main_support.c input.c fractal_utils.c fractal_render.c 
 
 # Add prefixes for each directory to the respective files
 SRCS		:= $(addprefix $(SRC_DIR)/, $(SRC_FILES))
@@ -47,10 +47,15 @@ DIRS		:= $(INC_DIR) $(SRC_DIR) $(OBJ_DIR) $(LIBFT_DIR)
 # ==========================
 all: $(NAME)
 
+CMLX:
+	@echo "Compiling MLX..."
+	$(MAKE) -C minilibx-linux -s
+	@echo "MLX compiled successfully."
+
 # ==========================
 # Build the Executable
 # ==========================
-$(NAME): $(OBJS) $(LIBFT)
+$(NAME): $(OBJS) LIBFT CMLX
 	echo "Linking $(NAME)..."
 	$(CC) $(CFLAGS) $(OBJS) $(LIBFT) $(MLX) -o $@
 	echo "$(NAME) created successfully!"
@@ -64,7 +69,7 @@ $(OBJ_DIR)/%.o: $(SRC_DIR)/%.c | $(DIRS)
 # ==========================
 # Rule to Compile libft
 # ==========================
-$(LIBFT):
+LIBFT:
 	@echo "Compiling libft..."
 	$(MAKE) -C $(LIBFT_DIR) -s
 	@echo "libft compiled successfully."

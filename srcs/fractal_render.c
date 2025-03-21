@@ -6,7 +6,7 @@
 /*   By: makurek <marvin@42.fr>					 +#+  +:+	   +#+		*/
 /*												+#+#+#+#+#+   +#+		   */
 /*   Created: 2025/03/13 18:48:35 by makurek		   #+#	#+#			 */
-/*   Updated: 2025/03/17 18:36:56 by makurek        ########   odam.nl        */
+/*   Updated: 2025/03/21 13:59:39 by makurek        ########   odam.nl        */
 /*																			*/
 /* ************************************************************************** */
 
@@ -58,6 +58,8 @@ void	render_fractal(t_fractol *fractol, t_julia_param *param)
 	char	*data;
 
 	img = mlx_new_image(fractol->mlx_ptr, WIDTH, HEIGHT);
+	if (!img)
+		close_program(fractol, 1, 1);
 	data = get_image_data(img);
 	render_pixels(data, fractol, param);
 	mlx_put_image_to_window(fractol->mlx_ptr, fractol->win_ptr, img, 0, 0);

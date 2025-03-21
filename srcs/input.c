@@ -6,24 +6,32 @@
 /*   By: makurek <marvin@42.fr>						+#+					*/
 /*													+#+					 */
 /*   Created: 2025/03/17 18:37:43 by makurek		#+#	#+#				*/
-/*   Updated: 2025/03/17 18:43:43 by makurek        ########   odam.nl        */
+/*   Updated: 2025/03/21 13:30:39 by makurek        ########   odam.nl        */
 /*																			*/
 /* ************************************************************************** */
 
 #include "fractol.h"
 
 static void	zoom(t_fractol *min_max, double c_real,
-				double c_comp, double zoom_factor)
+			double c_comp, double zoom_factor)
 {
+	double	current_width;
+	double	current_height;
 	double	new_width;
 	double	new_height;
 
-	new_width = (min_max->x_max - min_max->x_min) * zoom_factor;
-	new_height = (min_max->y_max - min_max->y_min) * zoom_factor;
-	min_max->x_min = c_real - new_width / 2;
-	min_max->x_max = c_real + new_width / 2;
-	min_max->y_min = c_comp - new_height / 2;
-	min_max->y_max = c_comp + new_height / 2;
+	current_width = min_max->x_max - min_max->x_min;
+	current_height = min_max->y_max - min_max->y_min;
+	new_width = current_width * zoom_factor;
+	new_height = current_height * zoom_factor;
+	min_max->x_min = c_real - ((new_width / current_width)
+			* (c_real - min_max->x_min));
+	min_max->x_max = c_real + ((new_width / current_width)
+			* (min_max->x_max - c_real));
+	min_max->y_min = c_comp - ((new_height / current_height)
+			* (c_comp - min_max->y_min));
+	min_max->y_max = c_comp + ((new_height / current_height)
+			* (min_max->y_max - c_comp));
 }
 
 int	mouse_hook(int button, int x, int y, t_fractol *min_max)
@@ -39,15 +47,13 @@ int	mouse_hook(int button, int x, int y, t_fractol *min_max)
 		zoom(min_max, c_real, c_comp, 1.0 / ZOOM_FACTOR);
 	else
 		return (0);
-	mlx_clear_window(min_max->mlx_ptr, min_max->win_ptr);
 	render_fractal(min_max, &min_max->param);
 	return (0);
 }
 
-int	key_hook(int keycode, void *param)
+int	key_hook(int keycode, t_fractol *min_max)
 {
-	(void) param;
 	if (keycode == 65307)
-		exit(1);
+		close_program(min_max, 1, 1);
 	return (0);
 }

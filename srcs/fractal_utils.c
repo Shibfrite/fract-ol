@@ -6,7 +6,7 @@
 /*   By: makurek <marvin@42.fr>                        +#+                    */
 /*                                                    +#+                     */
 /*   Created: 2025/03/17 18:20:52 by makurek        #+#    #+#                */
-/*   Updated: 2025/03/17 18:34:45 by makurek        ########   odam.nl        */
+/*   Updated: 2025/03/19 17:05:58 by makurek        ########   odam.nl        */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,9 +31,6 @@ static int	determin_iteration(double cr, double ci, double zr, double zi)
 int	compute_fractal_color(double real, double comp,
 			t_julia_param *param)
 {
-	int	r;
-	int	g;
-	int	b;
 	int	iter;
 	int	color;
 
@@ -45,12 +42,7 @@ int	compute_fractal_color(double real, double comp,
 	if (iter == MAX_ITER)
 		color = 0x00ff00;
 	else
-	{
-		r = (iter * 14) % 256;
-		g = (iter * 0) % 256;
-		b = (iter * 0) % 256;
-		color = (r << 16) | (g << 8) | b;
-	}
+		color = ((iter * 14) % 256) << 16;
 	return (color);
 }
 
